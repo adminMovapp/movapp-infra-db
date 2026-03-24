@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+   db:
+      image: postgres:16
+      container_name: movapp-db
+      restart: always
+      environment:
+         POSTGRES_USER: admin
+         POSTGRES_PASSWORD: movapp
+         POSTGRES_DB: Movapp
+         TZ: America/Mexico_City
+         PGTZ: America/Mexico_City
+      ports:
+         - "5432:5432"
+      volumes:
+         - movapp_db_data:/var/lib/postgresql/data
+         - /etc/localtime:/etc/localtime:ro
+      command: postgres -c timezone=America/Mexico_City
+      networks:
+         - movapp-network
+
+volumes:
+   movapp_db_data:
+
+networks:
+   movapp-network:
+      name: movapp-network
