@@ -1,0 +1,38 @@
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'app_user') THEN
+      CREATE USER app_user WITH PASSWORD 'app_pass';
+   END IF;
+
+   IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'backoffice_user') THEN
+      CREATE USER backoffice_user WITH PASSWORD 'backoffice_pass';
+   END IF;
+END
+$$;
+
+GRANT CONNECT ON DATABASE "Movapp" TO app_user;
+GRANT CONNECT ON DATABASE "Movapp" TO backoffice_user;
+
+\c Movapp
+
+GRANT USAGE ON SCHEMA public TO app_user;
+GRANT USAGE ON SCHEMA public TO backoffice_user;
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO app_user;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO backoffice_user;
+
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO app_user;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO backoffice_user;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT ALL ON TABLES TO app_user;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT ALL ON TABLES TO backoffice_user;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT ALL ON SEQUENCES TO app_user;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT ALL ON SEQUENCES TO backoffice_user;
